@@ -369,7 +369,7 @@ del df_test_v['min']
 y_train_v = df_train_v['FCH4_F']
 y_test_v = df_test_v['FCH4_F']
 
-#normalization
+# Normalization
 df_train2_v = (df_train_v - df_train_v.min(axis=0))/(df_train_v.max(axis=0)-df_train_v.min(axis=0))
 df_test2_v = (df_test_v - df_train_v.min(axis=0))/(df_train_v.max(axis=0)-df_train_v.min(axis=0))
 
