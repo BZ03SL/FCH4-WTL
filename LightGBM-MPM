@@ -390,7 +390,7 @@ lgbm_vv=lgb.LGBMRegressor(learning_rate=0.095,max_depth=22,num_leaves=130,min_ch
                             reg_alpha=0.06,reg_lambda=0.01)
 lgbm_vv.fit(train_x_v,train_y_v)
 
-#make predictions
+# Make predictions
 train_y_pred_vv = lgbm_vv.predict(train_x_v)
 test_y_pred_vv = lgbm_vv.predict(test_x_v)
 
