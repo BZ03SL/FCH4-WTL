@@ -17,6 +17,7 @@ import statsmodels.api as sm
 from statsmodels.api import OLS
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
+import lightgbm as lgb
 %matplotlib inline
 
 from sklearn.preprocessing import StandardScaler
