@@ -25,6 +25,7 @@ scaler = StandardScaler()
 
 assert(sys.version_info.major==3),print(sys.version)
 
+# Data import and data cleaning
 df=pd.read_csv('HK-MPM.csv')
 df=df.replace(-9999,np.nan)
 df=df.dropna()
@@ -36,6 +37,7 @@ for i in df.index:
     df['hr'] = (df['TIMESTAMP_START'][i]/100)%100
     df['min'] = df['TIMESTAMP_START'][i]%100
 
+# Train/Test split function
 def split_data(df, train_size=.8):
     length = len(df)
     indices = list(range(length))
@@ -52,7 +54,7 @@ def split_data(df, train_size=.8):
 dfr=df.copy()
 df_train_v,df_test_v  = split_data(dfr)
 
-#提取训练集中每个月份的CH4的均值
+# Calculate monthly mean FCH4 in training dataset
 month1_m=df_train_v[df_train_v['month']==1].FCH4_F.mean()
 month2_m=df_train_v[df_train_v['month']==2].FCH4_F.mean()
 month3_m=df_train_v[df_train_v['month']==3].FCH4_F.mean()
@@ -66,7 +68,7 @@ month10_m=df_train_v[df_train_v['month']==10].FCH4_F.mean()
 month11_m=df_train_v[df_train_v['month']==11].FCH4_F.mean()
 month12_m=df_train_v[df_train_v['month']==12].FCH4_F.mean()
 
-#提取训练集中每个月份的CH4标准差
+# Calculate monthly FCH4 variance in training dataset
 var_1=df_train_v[df_train_v['month']==1].FCH4_F.var()
 var_2=df_train_v[df_train_v['month']==2].FCH4_F.var()
 var_3=df_train_v[df_train_v['month']==3].FCH4_F.var()
@@ -80,7 +82,7 @@ var_10=df_train_v[df_train_v['month']==10].FCH4_F.var()
 var_11=df_train_v[df_train_v['month']==11].FCH4_F.var()
 var_12=df_train_v[df_train_v['month']==12].FCH4_F.var()
 
-#提取训练集中每个月份的CH4的最大值
+# Calculate monthly maximum FCH4 value in training dataset
 max_1=df_train_v[df_train_v['month']==1].FCH4_F.max()
 max_2=df_train_v[df_train_v['month']==2].FCH4_F.max()
 max_3=df_train_v[df_train_v['month']==3].FCH4_F.max()
@@ -94,7 +96,7 @@ max_10=df_train_v[df_train_v['month']==10].FCH4_F.max()
 max_11=df_train_v[df_train_v['month']==11].FCH4_F.max()
 max_12=df_train_v[df_train_v['month']==12].FCH4_F.max()
 
-#提取训练集中每个月份的CH4的最小值
+# Calculate monthly minimum FCH4 value in training dataset
 min_1=df_train_v[df_train_v['month']==1].FCH4_F.min()
 min_2=df_train_v[df_train_v['month']==2].FCH4_F.min()
 min_3=df_train_v[df_train_v['month']==3].FCH4_F.min()
@@ -108,7 +110,7 @@ min_10=df_train_v[df_train_v['month']==10].FCH4_F.min()
 min_11=df_train_v[df_train_v['month']==11].FCH4_F.min()
 min_12=df_train_v[df_train_v['month']==12].FCH4_F.min()
 
-#把CH4_mean加入训练数据
+# Add monthly mean FCH4 into training dataset
 CH4_mean_train={'CH4_mean':df_train_v['month'].values.tolist()}
 CH4_mean_train=pd.DataFrame(CH4_mean_train)
 df_train_v.reset_index(drop=True, inplace=True)
@@ -140,7 +142,7 @@ for i in df_train_v.index:
     elif(df_train_v.loc[i,'CH4_mean']==12):
         df_train_v.loc[i,'CH4_mean']=month12_m
 
-#把CH4_mean加入测试数据
+# Add monthly mean FCH4 into testing dataset
 CH4_mean_test={'CH4_mean':df_test_v['month'].values.tolist()}
 CH4_mean_test=pd.DataFrame(CH4_mean_test)
 df_test_v.reset_index(drop=True, inplace=True)
@@ -171,7 +173,7 @@ for i in df_test_v.index:
     elif(df_test_v.loc[i,'CH4_mean']==12):
         df_test_v.loc[i,'CH4_mean']=month12_m
 
-#把CH4_var加入训练数据
+# Add monthly FCH4 variance into training dataset
 CH4_var_train={'CH4_var':df_train_v['month'].values.tolist()}
 CH4_var_train=pd.DataFrame(CH4_var_train)
 df_train_v=pd.concat([df_train_v,CH4_var_train],axis=1)
@@ -201,7 +203,7 @@ for i in df_train_v.index:
     elif(df_train_v.loc[i,'CH4_var']==12):
         df_train_v.loc[i,'CH4_var']=var_12
 
-#把CH4_var加入测试数据
+# Add monthly FCH4 variance into testing dataset
 CH4_var_test={'CH4_var':df_test_v['month'].values.tolist()}
 CH4_var_test=pd.DataFrame(CH4_var_test)
 df_test_v=pd.concat([df_test_v,CH4_var_test],axis=1)
@@ -231,7 +233,7 @@ for i in df_test_v.index:
     elif(df_test_v.loc[i,'CH4_var']==12):
         df_test_v.loc[i,'CH4_var']=var_12
 
-#把CH4_max加入训练数据
+# Add monthly FCH4 maximum value into training dataset
 CH4_max_train={'CH4_max':df_train_v['month'].values.tolist()}
 CH4_max_train=pd.DataFrame(CH4_max_train)
 df_train_v=pd.concat([df_train_v,CH4_max_train],axis=1)
@@ -261,7 +263,7 @@ for i in df_train_v.index:
     elif(df_train_v.loc[i,'CH4_max']==12):
         df_train_v.loc[i,'CH4_max']=max_12
 
-#把CH4_max加入测试数据
+# Add monthly FCH4 maximum value into testing dataset
 CH4_max_test={'CH4_max':df_test_v['month'].values.tolist()}
 CH4_max_test=pd.DataFrame(CH4_max_test)
 df_test_v=pd.concat([df_test_v,CH4_max_test],axis=1)
@@ -291,7 +293,7 @@ for i in df_test_v.index:
     elif(df_test_v.loc[i,'CH4_max']==12):
         df_test_v.loc[i,'CH4_max']=max_12
 
-#把CH4_min加入测试数据
+# Add monthly FCH4 minimum value into testing dataset
 CH4_min_test={'CH4_min':df_test_v['month'].values.tolist()}
 CH4_min_test=pd.DataFrame(CH4_min_test)
 df_test_v=pd.concat([df_test_v,CH4_min_test],axis=1)
@@ -321,7 +323,7 @@ for i in df_test_v.index:
     elif(df_test_v.loc[i,'CH4_min']==12):
         df_test_v.loc[i,'CH4_min']=min_12
 
-#把CH4_min加入训练数据
+# Add monthly FCH4 minimum value into training dataset
 CH4_min_train={'CH4_min':df_train_v['month'].values.tolist()}
 CH4_min_train=pd.DataFrame(CH4_min_train)
 df_train_v=pd.concat([df_train_v,CH4_min_train],axis=1)
@@ -367,39 +369,39 @@ del df_test_v['min']
 y_train_v = df_train_v['FCH4_F']
 y_test_v = df_test_v['FCH4_F']
 
+#normalization
+df_train2_v = (df_train_v - df_train_v.min(axis=0))/(df_train_v.max(axis=0)-df_train_v.min(axis=0))
+df_test2_v = (df_test_v - df_train_v.min(axis=0))/(df_train_v.max(axis=0)-df_train_v.min(axis=0))
 
-#df_train2_v = (df_train_v - df_train_v.min(axis=0))/(df_train_v.max(axis=0)-df_train_v.min(axis=0))
-#df_test2_v = (df_test_v - df_train_v.min(axis=0))/(df_train_v.max(axis=0)-df_train_v.min(axis=0))
-
-#df_train_v = df_train2_v
-#df_test_v = df_test2_v
+df_train_v = df_train2_v
+df_test_v = df_test2_v
 
 del df_train_v['FCH4_F']
 del df_test_v['FCH4_F']
-
-print(df_train_v.info())
 
 train_x_v = df_train_v
 train_y_v = y_train_v
 test_x_v  = df_test_v
 test_y_v  = y_test_v
-print(train_x_v.shape, train_y_v.shape)
 
+# Train LightGBM model
 lgbm_vv=lgb.LGBMRegressor(learning_rate=0.095,max_depth=22,num_leaves=130,min_child_samples=60,
                             feature_fraction=0.9,bagging_fraction=0.9,bagging_freq=5,
                             reg_alpha=0.06,reg_lambda=0.01)
 lgbm_vv.fit(train_x_v,train_y_v)
 
+#make predictions
 train_y_pred_vv = lgbm_vv.predict(train_x_v)
 test_y_pred_vv = lgbm_vv.predict(test_x_v)
 
+# Control the amount of scatters
 import random
 true_d=test_y_v
 pred_d=test_y_pred_vv
 true_d=pd.DataFrame(true_d)
 pred_d=pd.DataFrame(pred_d)
-length_d=int(test_y.shape[0])
-for i in range(0,int(39*length_d/40)):
+length_d=int(test_y_v.shape[0])
+for i in range(0,int(7*length_d/8)):
     rand=random.random()
     x=rand*(true_d.shape[0])
     x=int(x)
@@ -409,19 +411,20 @@ for i in range(0,int(39*length_d/40)):
     true_d=true_d.drop([true_i])
     pred_d=pred_d.drop([pred_i])
     
+# Visualize the prediction accuracy with joint kernel density and scatter plot
 from matplotlib.pyplot import MultipleLocator
 plt.figure(figsize=(30,30))
-g=sns.jointplot(true_d,pred_d,kind="kde",space=0,color="darkgreen",n_levels=7,xlim=(-20,175),ylim=(-20,175))
+g=sns.jointplot(true_d,pred_d,kind="kde",space=0,color="darkgreen",n_levels=7,xlim=(-25,80),ylim=(-25,80))
 g.set_axis_labels("","",
                   fontsize=20,labelpad=12,family='Arial');
 g.plot_joint(plt.scatter,s=30,marker="+",color="b")
-plt.plot([-35,180],[-35,180],linewidth = '1',color='b')
-plt.text(110,-15,"$\mathregular{R^2}$: 0.807\nRMSE: 30.9\nMAE: 17.8",fontsize=19,family='Arial')
+plt.plot([-35,110],[-35,110],linewidth = '1',color='b')
+plt.text(110,-15,"$\mathregular{R^2}$: 0.490\nRMSE: 31.7\nMAE: 19.9",fontsize=19,family='Arial')
 plt.tick_params(labelsize=16,length=10)
 
 ax=plt.gca()
-x_major_locator=MultipleLocator(50)
-y_major_locator=MultipleLocator(50)
+x_major_locator=MultipleLocator(20)
+y_major_locator=MultipleLocator(20)
 ax.xaxis.set_major_locator(x_major_locator)
 ax.yaxis.set_major_locator(y_major_locator)
 
