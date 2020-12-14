@@ -400,7 +400,7 @@ pred_d=test_y_pred_vv
 true_d=pd.DataFrame(true_d)
 pred_d=pd.DataFrame(pred_d)
 length_d=int(test_y_v.shape[0])
-for i in range(0,int(7*length_d/8)):
+for i in range(0,int(23*length_d/24)):
     rand=random.random()
     x=rand*(true_d.shape[0])
     x=int(x)
