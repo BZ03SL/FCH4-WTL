@@ -30,12 +30,11 @@ df=pd.read_csv('HK-MPM.csv')
 df=df.replace(-9999,np.nan)
 df=df.dropna()
 str2float = lambda d: list(map(float, d))
-for i in df.index:
-    df['yr'] = df['TIMESTAMP_START'][i]//100000000
-    df['month'] = (df['TIMESTAMP_START'][i]//1000000)%100
-    df['day'] = (df['TIMESTAMP_START'][i]//10000)%100
-    df['hr'] = (df['TIMESTAMP_START'][i]//100)%100
-    df['min'] = df['TIMESTAMP_START'][i]%100
+df['yr'] = df['TIMESTAMP_START']//100000000
+df['month'] = (df['TIMESTAMP_START']//1000000)%100
+df['day'] = (df['TIMESTAMP_START']//10000)%100
+df['hr'] = (df['TIMESTAMP_START']//100)%100
+df['min'] = df['TIMESTAMP_START']%100
 
 # Train/Test split function
 def split_data(df, train_size=.8):
