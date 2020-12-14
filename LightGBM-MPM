@@ -419,7 +419,7 @@ g.set_axis_labels("","",
                   fontsize=20,labelpad=12,family='Arial');
 g.plot_joint(plt.scatter,s=30,marker="+",color="b")
 plt.plot([-35,110],[-35,110],linewidth = '1',color='b')
-plt.text(110,-15,"$\mathregular{R^2}$: 0.490\nRMSE: 31.7\nMAE: 19.9",fontsize=19,family='Arial')
+plt.text(44,-23,"$\mathregular{R^2}$: 0.490\nRMSE: 31.7\nMAE: 19.9",fontsize=19,family='Arial')
 plt.tick_params(labelsize=16,length=10)
 
 ax=plt.gca()
